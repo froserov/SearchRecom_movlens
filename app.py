@@ -6,10 +6,11 @@ import numpy as np
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 
-# Conectar a Elasticsearch (local)
+# Elastic Search correrá de forma local
 es = Elasticsearch("http://localhost:9200")
 
-# Definir índice con sinónimos y mejoras en búsqueda
+# Configuracion de indice
+## Se incluye funcionalidad básica de sinónimos en el indice movies
 index_name = "movies"
 index_config = {
     "settings": {
@@ -46,11 +47,12 @@ index_config = {
 if not es.indices.exists(index=index_name):
     es.indices.create(index=index_name, body=index_config)
 
-# Cargar datos preprocesados
+# Cargar de datos preprocesados ( para no realizar reproceso cada que consultemos en la app)
 movies = pd.read_parquet("data/processed/movies_processed.parquet")
 adjusted_sim = np.load("data/processed/adjusted_sim.npy")
 
-# Cargar datos a Elasticsearch con boosting y mejoras
+# Cargar datos a Elasticsearch 
+
 bulk_data = []
 for movie in movies.to_dict(orient="records"):
     bulk_data.append({
@@ -65,7 +67,7 @@ for movie in movies.to_dict(orient="records"):
 
 helpers.bulk(es, bulk_data)
 
-# Función para realizar búsqueda en Elasticsearch con Boosting y Fuzziness
+# Función para realizar búsqueda en Elasticsearch con Boosting y permitiendo errores ortográficos
 @st.cache_data
 def search_movies(query):
     search_body = {
@@ -73,10 +75,10 @@ def search_movies(query):
             "multi_match": {
                 "query": query,
                 "fields": [
-                    "title^3",  # 🔥 Más peso en títulos
-                    "genres^1"  # 🔥 Menos peso en géneros
+                    "title^3",  # Más peso en títulos
+                    "genres^1"  # Menos peso en géneros
                 ],
-                "fuzziness": "AUTO"  # 🔥 Permite errores tipográficos
+                "fuzziness": "AUTO"  # Permite errores tipográficos
             }
         }
     }
@@ -86,7 +88,8 @@ def search_movies(query):
 # Crear índice de títulos
 indices = pd.Series(movies.index, index=movies["title"]).drop_duplicates()
 
-# Función para obtener recomendaciones optimizadas
+# Función para obtener recomendaciones por contenido 
+
 @st.cache_data
 def get_recommendations(title):
     if title in indices:
@@ -103,7 +106,10 @@ def get_recommendations(title):
     else:
         return []
 
-# 📌 Streamlit UI 📌
+
+
+# Interfaz de la app en Streamlit
+
 st.set_page_config(page_title="🎬 Buscador y Recomendador de Películas", layout="wide")
 st.title("🎬 Buscador y Recomendador de Películas")
 st.write("Encuentra películas y obtén recomendaciones basadas en contenido y ratings.")

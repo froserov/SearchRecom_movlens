@@ -8,11 +8,10 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Archivos grandes que no deberían subirse
-data/processed/*.parquet
-data/processed/*.json
-data/processed/*.npy
-notebooks/*.ipynb_checkpoints/
+
+# Ignorar todos los archivos en processed, excepto la carpeta vacía
+data/processed/*
+!data/processed/.gitkeep
 
 # Archivos de Elasticsearch (si se crean en el proyecto)
 es_data/
