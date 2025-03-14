@@ -1,0 +1,18 @@
+# Archivos de configuración local
+.env
+
+# Archivos de logs y caché
+*.log
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos grandes que no deberían subirse
+data/processed/*.parquet
+data/processed/*.json
+data/processed/*.npy
+notebooks/*.ipynb_checkpoints/
+
+# Archivos de Elasticsearch (si se crean en el proyecto)
+es_data/

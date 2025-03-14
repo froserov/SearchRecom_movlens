@@ -1,0 +1,18 @@
+# Librerías básicas
+numpy
+pandas
+scikit-learn
+streamlit
+pathlib
+
+# Elasticsearch
+elasticsearch
+
+# Procesamiento de datos
+pyarrow
+
+# API requests
+requests
+
+# Manejo de variables de entorno
+python-dotenv
