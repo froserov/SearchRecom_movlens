@@ -1,8 +1,10 @@
-🎬 ### Buscador y Recomendador de Películas
+🎬 Buscador y Recomendador de Películas
+
 Este proyecto implementa un buscador avanzado de películas y un sistema de recomendación por contenido, utilizando 
 Elasticsearch para mejorar la eficiencia en la  búsqueda y ofrecer una experiencia más flexible.
 
-📌 #### Características
+📌  Características
+
 ✅ Búsqueda avanzada con Elasticsearch
 Indexación optimizada de títulos, géneros y ratings.
 Soporte para sinónimos en géneros y palabras clave.
